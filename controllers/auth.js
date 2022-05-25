@@ -56,22 +56,21 @@ const googleSign = async(req, res) => {
     
 
     try {
-        const {nombre, correo, img} = await googleVerify( id_token );
+        const { correo, nombre, img } = await googleVerify( id_token );
 
-        let usuario = await Usuario.findOne({ correo })
+        let usuario = await Usuario.findOne({ correo });
 
-        if( !usuario ){
+        if ( !usuario ) {
             const data = {
                 nombre,
                 correo,
-                contraseña: "",
+                password: '',
                 img,
                 google: true
-            }
-           
-           usuario = new Usuario( data );
-           await usuario
-        
+            };
+
+            usuario = new Usuario( data );
+            await usuario.save();
         }
 
         if( !usuario.estado ){
